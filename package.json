@@ -2,13 +2,17 @@
   "name": "hapitest",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server",
+    "server": "nodemon server"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@hapi/hapi": "^20.1.2"
+    "@hapi/hapi": "^20.1.2",
+    "config": "^3.3.6",
+    "dotenv": "^8.2.0",
+    "pg": "^8.5.1"
   }
 }
