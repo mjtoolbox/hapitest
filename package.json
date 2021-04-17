@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server",
-    "server": "nodemon server"
+    "server": "nodemon server",
+    "test": "lab -v **/*.test.js"
   },
   "author": "",
   "license": "ISC",
@@ -14,5 +15,9 @@
     "config": "^3.3.6",
     "dotenv": "^8.2.0",
     "pg": "^8.5.1"
+  },
+  "devDependencies": {
+    "@hapi/code": "^8.0.3",
+    "@hapi/lab": "^24.1.1"
   }
 }
