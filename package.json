@@ -6,14 +6,16 @@
   "scripts": {
     "start": "node server",
     "server": "nodemon server",
-    "test": "lab -v **/*.test.js"
+    "test": "mocha --reporter spec"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@hapi/hapi": "^20.1.2",
+    "chai": "^4.3.4",
     "config": "^3.3.6",
     "dotenv": "^8.2.0",
+    "mocha": "^8.3.2",
     "pg": "^8.5.1"
   },
   "devDependencies": {

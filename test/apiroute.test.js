@@ -41,6 +41,6 @@ describe('GET /all', () => {
       method: 'get',
       url: '/all?fy=true&year=2021&month=3&orderby=description&sort=asc',
     });
-    expect(res.rows.length()).must.be.above(0);
+    expect(res.rowCount).to.not.be.empty;
   });
 });

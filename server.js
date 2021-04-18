@@ -85,6 +85,7 @@ const init = async () => {
       try {
         console.log(select);
         const result = await db.query(select);
+        console.log(result.rowCount);
         return h.response(result.rows);
       } catch (err) {
         console.log(err);
@@ -145,6 +146,7 @@ const init = async () => {
       try {
         console.log(select);
         const result = await db.query(select);
+        console.log(result.rowCount);
         return h.response(result.rows);
       } catch (err) {
         console.log(err);
