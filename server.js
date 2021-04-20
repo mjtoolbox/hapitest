@@ -206,6 +206,55 @@ const init = async () => {
     },
   });
 
+  const formattedNow = () => {
+    var d = new Date();
+    return d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + d.getDate();
+  };
+
+  // Lead by Description and Category
+  server.route({
+    method: 'GET',
+    path: '/find',
+    handler: async function (request, h) {
+      const description = request.query.description
+        ? request.query.description
+        : '';
+      const category = request.query.category
+        ? ' and category=' + "'${request.query.category}'"
+        : '';
+      const code = request.query.code
+        ? ' and code=' + "'${request.query.code}'"
+        : '';
+      const trans_date = request.query.trans_date
+        ? ' and trans_date=' + "'${request.query.tran_date}'"
+        : '';
+      const orderby = request.query.orderby
+        ? request.query.orderby
+        : 'trans_date';
+      const sort = request.query.sort ? request.query.sort : 'asc';
+
+      let select = `SELECT * FROM expense WHERE LOWER(description) like LOWER('%${description}%')`;
+      select =
+        select +
+        category +
+        code +
+        trans_date +
+        ' order by ' +
+        orderby +
+        ' ' +
+        sort;
+
+      try {
+        console.log(select);
+        const result = await db.query(select);
+        console.log(result.rowCount);
+        return h.response(result.rows);
+      } catch (err) {
+        console.log(err);
+      }
+    },
+  });
+
   await server.start();
   console.log('Server running on %s', server.info.uri);
 };
