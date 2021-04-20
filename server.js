@@ -23,7 +23,6 @@ const init = async () => {
       let select = 'SELECT * FROM expense';
       try {
         const result = await db.query(select);
-        db.end();
         return h.response(result.rows);
       } catch (err) {
         console.log(err);
@@ -148,6 +147,59 @@ const init = async () => {
         const result = await db.query(select);
         console.log(result.rowCount);
         return h.response(result.rows);
+      } catch (err) {
+        console.log(err);
+      }
+    },
+  });
+
+  server.route({
+    method: 'POST',
+    path: '/create',
+    handler: async function (request, h) {
+      const expense = JSON.parse(request.payload);
+      let insert = `INSERT INTO expense (trans_date, code, description, amount, gst, credit, category, confidence) VALUES (
+        '${expense.trans_date}', '${expense.code}', '${expense.description}', ${expense.amount}, ${expense.gst}, '${expense.credit}', '${expense.category}', ${expense.confidence}) RETURNING *`;
+      try {
+        const result = await db.query(insert);
+        return h.response(result.rows[0]);
+      } catch (err) {
+        console.log(err);
+      }
+    },
+  });
+
+  server.route({
+    method: 'PUT',
+    path: '/edit/{id}',
+    handler: async function (request, h) {
+      const id = parseInt(request.params.id);
+      const expense = JSON.parse(request.payload);
+
+      let update = `UPDATE expense SET trans_date = '${expense.trans_date}', code = '${expense.code}', description = '${expense.description}', amount = ${expense.amount}, gst = ${expense.gst}, credit = '${expense.credit}', category = '${expense.category}', confidence = ${expense.confidence} WHERE id=${id} RETURNING *`;
+      try {
+        const result = await db.query(update);
+        return h.response(result.rows[0]);
+      } catch (err) {
+        console.log(err);
+      }
+    },
+  });
+
+  server.route({
+    method: 'PUT',
+    path: '/applygst/{id}',
+    handler: async function (request, h) {
+      const id = parseInt(request.params.id);
+      const expense = JSON.parse(request.payload);
+      const amount = parseFloat(expense.amount);
+      const gst = amount - amount / 1.05;
+      console.log(gst);
+
+      let update = `UPDATE expense SET gst = ${gst} WHERE id=${id} RETURNING *`;
+      try {
+        const result = await db.query(update);
+        return h.response(result.rows[0]);
       } catch (err) {
         console.log(err);
       }
