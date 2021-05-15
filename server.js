@@ -9,8 +9,11 @@ const db = require('./db/postgres');
 
 const init = async () => {
   const server = Hapi.server({
-    port: 3000,
+    port: 4000,
     host: 'localhost',
+    routes: {
+      cors: true,
+    },
   });
 
   console.log(`DB URL is ${process.env.DATABASE_URL}`);
@@ -174,9 +177,11 @@ const init = async () => {
     path: '/edit/{id}',
     handler: async function (request, h) {
       const id = parseInt(request.params.id);
-      const expense = JSON.parse(request.payload);
+      console.log(request.payload);
+      const expense = JSON.parse(JSON.stringify(request.payload));
 
       let update = `UPDATE expense SET trans_date = '${expense.trans_date}', code = '${expense.code}', description = '${expense.description}', amount = ${expense.amount}, gst = ${expense.gst}, credit = '${expense.credit}', category = '${expense.category}', confidence = ${expense.confidence} WHERE id=${id} RETURNING *`;
+
       try {
         const result = await db.query(update);
         return h.response(result.rows[0]);
